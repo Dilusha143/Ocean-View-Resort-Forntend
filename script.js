@@ -6,7 +6,6 @@ const STAFF = [
 
 let ROOM_TYPES = {};  
 
-
 async function loadRoomTypes() {
   try {
     const res = await fetch('http://localhost:8080/OceanViewResort/api/roomtypes', {
