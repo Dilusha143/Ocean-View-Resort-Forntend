@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ocean View Resort — Help</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="dashPage" class="page active">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div style="padding:28px 24px 20px;">
+      <p style="color:var(--gold);font-size:11px;letter-spacing:.14em;text-transform:uppercase;">Ocean View</p>
+      <h2 style="color:white;font-size:20px;font-weight:300;font-family:'Cormorant Garamond',serif;">Resort System</h2>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.08);margin:0 16px 16px;"></div>
+
+    <a class="sidebar-item" href="overview.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Overview
+    </a>
+    <a class="sidebar-item" href="reservations.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Reservations
+    </a>
+    <a class="sidebar-item" href="newReservation.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      New Reservation
+    </a>
+    <a class="sidebar-item" href="billing.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+      Billing
+    </a>
+    <a class="sidebar-item active" href="help.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help
+    </a>
+
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;border-top:1px solid rgba(255,255,255,0.08);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:36px;height:36px;background:rgba(201,168,76,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <p id="sidebarName" style="color:white;font-size:13px;font-weight:500;"></p>
+          <p id="sidebarRole" style="color:var(--mist);font-size:11px;text-transform:uppercase;letter-spacing:.08em;"></p>
+        </div>
+      </div>
+      <button onclick="doLogout()" style="width:100%;background:rgba(255,255,255,0.08);color:var(--mist);border:none;border-radius:8px;padding:9px;font-size:13px;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,0.14)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main" style="padding:36px;">
+    <div id="section-help" class="fade-in">
+      <div style="margin-bottom:28px;">
+        <h2 style="font-size:32px;font-weight:300;">Help & Guidelines</h2>
+        <p style="color:#7a9aaa;font-size:13px;margin-top:2px;">Guide for new staff members</p>
+      </div>
+
+      <div style="max-width:720px;">
+        <div class="card" style="padding:32px;margin-bottom:20px;">
+          <h3 style="font-size:22px;font-weight:400;margin-bottom:6px;color:var(--ocean);">Welcome to Ocean View Resort System</h3>
+          <p style="font-size:14px;color:#556;line-height:1.8;">This system helps you manage all room reservations, guest records, and billing for Ocean View Resort, Galle. Below are guidelines for each feature.</p>
+        </div>
+
+        <div class="card" style="padding:8px 32px;">
+          <details class="help-item">
+            <summary>🔐 User Authentication (Login)</summary>
+            <div class="help-content">
+              Use your assigned <b>username</b> and <b>password</b> to log in. Never share your credentials. Admin accounts can manage staff. Receptionist accounts handle reservations and billing only. Contact your manager if you forget your password.
+            </div>
+          </details>
+          <details class="help-item">
+            <summary>📋 Adding a New Reservation</summary>
+            <div class="help-content">
+              Navigate to <b>New Reservation</b> in the sidebar. Fill in all required fields marked with (*): Guest Name, Contact Number, Room Type, Check-In, and Check-Out dates. The system will auto-generate a unique Reservation Number (e.g. R-00001). Select the appropriate room type and available room. The estimated cost will appear automatically. Click <b>Confirm Reservation</b> to save.
+            </div>
+          </details>
+          <details class="help-item">
+            <summary>🔍 Viewing Reservation Details</summary>
+            <div class="help-content">
+              Go to the <b>Reservations</b> section to see all bookings. Use the search bar to filter by guest name or reservation number. Use the status filter to view specific booking statuses. Click the <b>View</b> button on any row to see full reservation details in a popup.
+            </div>
+          </details>
+          <details class="help-item">
+            <summary>💰 Calculating & Printing a Bill</summary>
+            <div class="help-content">
+              Go to the <b>Billing</b> section and enter the Reservation Number. The system will automatically calculate the bill based on number of nights × room rate + 10% tax. Click <b>Print Bill</b> to open a printable version. After payment is collected, click <b>Mark as Paid</b> to update the reservation status.
+            </div>
+          </details>
+          <details class="help-item">
+            <summary>📊 Overview Dashboard</summary>
+            <div class="help-content">
+              The <b>Overview</b> page shows a summary of current reservations, including total bookings, confirmed, checked-in counts, and estimated revenue. Recent reservations are shown in the table for quick access.
+            </div>
+          </details>
+          <details class="help-item" style="border-bottom:none;">
+            <summary>🚪 Exiting the System</summary>
+            <div class="help-content">
+              Always click <b>Sign Out</b> at the bottom of the sidebar before leaving your workstation. This protects guest data and prevents unauthorized access. Never close the browser tab without signing out properly.
+            </div>
+          </details>
+        </div>
+
+        <div class="card" style="padding:24px 32px;margin-top:20px;background:linear-gradient(135deg,var(--deep),var(--ocean));color:white;">
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:8px;">Need more help?</h3>
+          <p style="font-size:13px;color:var(--mist);line-height:1.7;">Contact IT Support: <b style="color:white;">it@oceanviewresort.lk</b><br/>Front Desk Manager: <b style="color:white;">+94 91 234 5679</b></p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /main -->
+</div><!-- /dashPage -->
+
+<script src="script.js"></script>
+</body>
+</html>
