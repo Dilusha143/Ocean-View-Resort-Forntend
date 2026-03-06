@@ -1,14 +1,12 @@
-// ═══════════════════════════════════════════════════════
-//  DATA STORE
-// ═══════════════════════════════════════════════════════
+
 const STAFF = [
   { id:1, fullName:'System Admin',   userName:'admin',        staffPassword:'admin123',  role:'ADMIN' },
   { id:2, fullName:'Receptionist 1', userName:'receptionist', staffPassword:'recept123', role:'RECEPTIONIST' }
 ];
 
-let ROOM_TYPES = {};  // will be populated from API
+let ROOM_TYPES = {};  
 
-// fetch room types from server and populate select inputs
+
 async function loadRoomTypes() {
   try {
     const res = await fetch('http://localhost:8080/OceanViewResort/api/roomtypes', {
@@ -24,7 +22,7 @@ async function loadRoomTypes() {
       const name = rt.roomTypeName || 'Unknown';
       ROOM_TYPES[id] = { name, price: priceNum };
     });
-    // update dropdown if present
+    
     const sel = document.getElementById('f-roomtype');
     if (sel) {
       sel.innerHTML = '<option value="">Select room type</option>' +
@@ -40,13 +38,13 @@ async function loadRoomTypes() {
   }
 }
 
-// fetch available rooms for a given room type and populate the room selector
+
 async function loadRoomsForType(typeID) {
   const roomSel = document.getElementById('f-room');
   if (!roomSel) return;
-  // disable until we have valid choices
+  
   roomSel.disabled = !typeID;
-  // reset to placeholder when no type
+ 
   if (!typeID) {
     roomSel.innerHTML = '<option value="">Select room</option>';
     return;
@@ -78,7 +76,7 @@ let reservations = [
 ];
 let nextID = 4;
 
-// fetch reservations from API and enrich with guest/room details
+
 async function loadReservations() {
   try {
     const res = await fetch('http://localhost:8080/OceanViewResort/api/reservations', {
@@ -88,17 +86,16 @@ async function loadReservations() {
     const data = await res.json();
     console.log('Fetched reservations from API:', data);
     
-    // Map API response to internal format
-    // Note: API doesn't include guest/room details, so we display what we have
+    
     reservations = data.map(r => ({
       id: r.reservationID,
       resNo: r.reservationNumber || `R-${String(r.reservationID).padStart(5, '0')}`,
-      guestName: '—',  // TODO: fetch from guest endpoint using guestID
+      guestName: '—',  
       guestID: r.guestID,
       address: '',
       contact: '',
       email: '',
-      roomTypeID: r.roomTypeID || 1,  // TODO: map from roomID via room endpoint
+      roomTypeID: r.roomTypeID || 1,  
       roomID: r.roomID,
       room: r.roomID?.toString(),
       checkIn: r.checkInDate,
@@ -107,28 +104,27 @@ async function loadReservations() {
       createdBy: r.createdBy
     }));
     
-    // Update nextID based on highest reservationID
+   
     const maxID = Math.max(...data.map(r => r.reservationID || 0), nextID - 1);
     nextID = maxID + 1;
     
-    // TODO: Fetch guest details using guestID to populate guestName, contact, etc.
-    // TODO: Fetch room details using roomID to get roomTypeID and room number
+  
     
     console.log('Mapped reservations:', reservations);
   } catch (err) {
     console.error('Failed to load reservations', err);
-    // keep the default sample data if fetch fails
+   
   }
 }
-// keep the logged-in user in localStorage so pages can be separate
+
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;   
 
-// if a user is already logged in and somehow on the login page, send them to the dashboard
+
 if(currentUser && window.location.href.toLowerCase().includes('login.html')) {
   window.location.href = 'overview.html';
 }
 
-// populate sidebar info if available
+
 if(currentUser) {
   const nameEl = document.getElementById('sidebarName');
   const roleEl = document.getElementById('sidebarRole');
@@ -136,10 +132,7 @@ if(currentUser) {
   if(roleEl) roleEl.textContent = currentUser.role;
 }   
 
-// ═══════════════════════════════════════════════════════
-//  AUTH
-// ═══════════════════════════════════════════════════════
-// helper to request session info and log it
+
 function fetchSessionInfo() {
   return fetch('http://localhost:8080/OceanViewResort/api/auth/session', {
     method: 'GET',
@@ -167,7 +160,6 @@ function doLogin() {
     return;
   }
   
-  // POST to API
   fetch('http://localhost:8080/OceanViewResort/api/auth/login', {
     method: 'POST',
     credentials: 'include',
@@ -202,7 +194,7 @@ if(loginPassEl) {
 }
 
 function doLogout() {
-  // notify backend and clear client state
+  
   fetch('http://localhost:8080/OceanViewResort/api/auth/logout', {
     method: 'POST',
     credentials: 'include'
@@ -212,9 +204,7 @@ function doLogout() {
   window.location.href = 'login.html';
 }
 
-// ═══════════════════════════════════════════════════════
-//  NAVIGATION
-// ═══════════════════════════════════════════════════════
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -231,9 +221,7 @@ function showSection(name) {
   if(name==='reservations') renderAllTable();
 }
 
-// ═══════════════════════════════════════════════════════
-//  OVERVIEW
-// ═══════════════════════════════════════════════════════
+
 function renderOverview() {
   // greeting and date
   const greetEl = document.getElementById('greetName');
@@ -276,9 +264,7 @@ function renderOverview() {
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-//  OVERVIEW ACTIONS
-// ═══════════════════════════════════════════════════════
+
 function doCheckIn(id) {
   const r = reservations.find(x=>x.id===id);
   if(r) r.status='CHECKED_IN';
@@ -295,9 +281,7 @@ function goToCheckOut(id) {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  ALL RESERVATIONS TABLE
-// ═══════════════════════════════════════════════════════
+
 function renderAllTable(list) {
   const data = list || reservations;
   const tbody = document.getElementById('allResTableBody');
@@ -335,9 +319,7 @@ function filterTable() {
   renderAllTable(filtered);
 }
 
-// ═══════════════════════════════════════════════════════
-//  VIEW RESERVATION MODAL
-// ═══════════════════════════════════════════════════════
+
 function viewReservation(id) {
   const r = reservations.find(x=>x.id===id);
   if(!r) return;
@@ -369,10 +351,7 @@ function field(label, val) {
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  NEW RESERVATION
-// ═══════════════════════════════════════════════════════
-// preview listeners will be added on DOMContentLoaded (page-specific)
+
 
 
 function updatePreview() {
@@ -412,7 +391,7 @@ function addReservation() {
     alertEl.className='alert alert-error'; alertEl.textContent='Please choose a room number.'; alertEl.style.display='block'; return;
   }
   
-  // If checkInNow, use today's date
+  
   if(checkInNow) {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -425,7 +404,7 @@ function addReservation() {
     alertEl.className='alert alert-error'; alertEl.textContent='Check-out date must be after check-in date.'; alertEl.style.display='block'; return;
   }
 
-  // POST to API
+
   const payload = {
     guestName: name,
     address: address,
@@ -468,14 +447,14 @@ function toggleCheckInNow() {
   const checkinInput = document.getElementById('f-checkin');
   
   if(checkInNow) {
-    // Visual checkbox: checked
+  
     box.style.borderColor  = 'var(--ocean)';
     box.style.background   = 'var(--foam)';
     tick.style.background  = 'var(--ocean)';
     tick.style.borderColor = 'var(--ocean)';
     tick.innerHTML         = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
     
-    // Disable the date picker and set today's date
+    
     if(checkinInput) {
       checkinInput.disabled = true;
       const today = new Date();
@@ -485,20 +464,20 @@ function toggleCheckInNow() {
       checkinInput.value = `${yyyy}-${mm}-${dd}`;
     }
   } else {
-    // Visual checkbox: unchecked
+    
     box.style.borderColor  = '#d0dde2';
     box.style.background   = '#f9fbfc';
     tick.style.background  = 'transparent';
     tick.style.borderColor = '#d0dde2';
     tick.innerHTML         = '';
     
-    // Enable the date picker and clear it
+  
     if(checkinInput) {
       checkinInput.disabled = false;
       checkinInput.value = '';
     }
   }
-  // Trigger price preview update
+  
   updatePreview();
 }
 
@@ -511,14 +490,10 @@ function clearForm() {
   if(checkInNow) toggleCheckInNow();
 }
 
-// ═══════════════════════════════════════════════════════
-//  NEW RESERVATION FORM STATE
-// ═══════════════════════════════════════════════════════
+
 let checkInNow = false;
 
-// ═══════════════════════════════════════════════════════
-//  BILLING
-// ═══════════════════════════════════════════════════════
+
 let currentBillRes = null;
 
 function findBill() {
@@ -573,9 +548,7 @@ function markPaid() {
   renderBill(r);
 }
 
-// ═══════════════════════════════════════════════════════
-//  CANCEL RESERVATION
-// ═══════════════════════════════════════════════════════
+
 function cancelRes(id) {
   if(!confirm('Cancel this reservation?')) return;
   const r = reservations.find(x=>x.id===id);
@@ -585,21 +558,17 @@ function cancelRes(id) {
   if(document.getElementById('stat-total')) renderOverview();
 }
 
-// ═══════════════════════════════════════════════════════
-//  MODAL
-// ═══════════════════════════════════════════════════════
+
 function closeModal(id) {
   document.getElementById(id).style.display='none';
 }
 
-// Close on overlay click
+
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', function(e) { if(e.target===this) this.style.display='none'; });
 });
 
-// ═══════════════════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════════════════
+
 function nightsBetween(a, b) {
   return Math.max(0, Math.round((new Date(b)-new Date(a))/(1000*60*60*24)));
 }
@@ -613,15 +582,15 @@ function statusBadge(s) {
   return `<span class="badge ${map[s]||''}">${labels[s]||s}</span>`;
 }
 
-// initialize page-specific features
+
 document.addEventListener('DOMContentLoaded', () => {
-  // if user isn't logged in and not already on login page, redirect
+ 
   if(!currentUser && !window.location.href.toLowerCase().includes('login.html')) {
     window.location.href = 'login.html';
-    return; // stop further initialization
+    return; 
   }
 
-  // load reservations from API on any page that needs them
+
   const needsReservations = document.getElementById('stat-total') || document.getElementById('allResTableBody');
   if(needsReservations) {
     loadReservations().then(() => {
@@ -629,11 +598,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if(document.getElementById('allResTableBody')) renderAllTable();
     });
   }
-  // log session info when navigating to any page aside from login (for verification)
+  
   if(!window.location.href.toLowerCase().includes('login.html')) {
     fetchSessionInfo().catch(()=>{}); // ignore errors
   }
-  // preview listeners for new reservation form
+  
   ['f-checkin','f-checkout','f-roomtype'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.addEventListener('change', () => {
@@ -643,24 +612,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  // load room types from API if input exists
+  
   if(document.getElementById('f-roomtype')) {
-    // start with room dropdown disabled until a type is chosen
+    
     loadRoomsForType('');
     loadRoomTypes().then(()=>{
-      // if a type was pre‑selected (unlikely), populate its rooms
+      
       const rtSel = document.getElementById('f-roomtype');
       if(rtSel && rtSel.value) loadRoomsForType(rtSel.value);
     });
   }
   
-  // auto-populate billing search if coming from overview checkout
+
   const billingResNo = sessionStorage.getItem('billingResNo');
   if(billingResNo) {
     const billSearchEl = document.getElementById('billSearch');
     if(billSearchEl) {
       billSearchEl.value = billingResNo;
-      // auto-trigger the search
+      
       setTimeout(() => findBill(), 100);
       sessionStorage.removeItem('billingResNo');
     }
